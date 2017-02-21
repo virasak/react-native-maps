@@ -234,8 +234,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
                 LatLng center = position.target;
+                float bearing = position.bearing;
                 lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, isTouchDown));
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, bearing, isTouchDown));
                 view.stopMonitoringRegion();
             }
         });
@@ -650,8 +651,9 @@ public class AirMapView extends MapView implements GoogleMap.InfoWindowAdapter,
             if (lastBoundsEmitted == null ||
                     LatLngBoundsUtils.BoundsAreDifferent(bounds, lastBoundsEmitted)) {
                 LatLng center = map.getCameraPosition().target;
+                float bearing = map.getCameraPosition().bearing;
                 lastBoundsEmitted = bounds;
-                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, true));
+                eventDispatcher.dispatchEvent(new RegionChangeEvent(getId(), bounds, center, bearing, true));
             }
 
             timerHandler.postDelayed(this, 100);
